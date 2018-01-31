@@ -8,7 +8,7 @@ import (
 )
 
 type Poster interface {
-	Post(context.Context, string) error
+	Post(context.Context, uint64) error
 }
 
 func NewWriterPoster(w io.Writer) *WritePoster {
@@ -23,7 +23,7 @@ type WritePoster struct {
 	w io.Writer
 }
 
-func (w *WritePoster) Post(ctx context.Context, status string) error {
-	_, err := fmt.Fprintf(w.w, "%v\n", status)
+func (w *WritePoster) Post(ctx context.Context, status uint64) error {
+	_, err := fmt.Fprintf(w.w, "%d\n", status)
 	return err
 }

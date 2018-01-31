@@ -32,11 +32,10 @@ func main() {
 
 	f := primebot.NewRandFetcher()
 	t := primebot.NewIntervalTicker(*interval)
-	r := &primebot.PlainFormat{}
 	g := primebot.NewProbablyPrimeGenerator(0)
 	p := primebot.NewStdoutPoster()
 
-	bot := primebot.NewPrimeBot(f, t, g, r, p, nil)
+	bot := primebot.NewPrimeBot(f, t, g, p, nil)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	go func() {

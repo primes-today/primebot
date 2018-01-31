@@ -20,7 +20,7 @@ type BotOpts struct {
 	Logger *log.Logger
 }
 
-func NewPrimeBot(f Fetcher, t Ticker, g Generator, r Formatter, p Poster, opts *BotOpts) *PrimeBot {
+func NewPrimeBot(f Fetcher, t Ticker, g Generator, p Poster, opts *BotOpts) *PrimeBot {
 	if opts == nil {
 		opts = &BotOpts{}
 	}
@@ -33,7 +33,6 @@ func NewPrimeBot(f Fetcher, t Ticker, g Generator, r Formatter, p Poster, opts *
 		ftc:  f,
 		tck:  t,
 		gen:  g,
-		fmt:  r,
 		pst:  p,
 		opts: opts,
 		log:  opts.Logger,
@@ -44,7 +43,6 @@ type PrimeBot struct {
 	ftc  Fetcher
 	tck  Ticker
 	gen  Generator
-	fmt  Formatter
 	pst  Poster
 	opts *BotOpts
 	log  *log.Logger
@@ -79,7 +77,7 @@ func (p *PrimeBot) Start(ctx context.Context) error {
 	for {
 		select {
 		case <-t:
-			status := p.fmt.Format(<-pc)
+			status := <-pc
 			err := p.pst.Post(ctx, status)
 			if err != nil {
 				return err

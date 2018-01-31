@@ -3,6 +3,7 @@ package primebot
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strconv"
 
 	mastodon "github.com/mattn/go-mastodon"
@@ -58,9 +59,9 @@ func (m *MastodonClient) Fetch(ctx context.Context) (*Status, error) {
 	}, nil
 }
 
-func (m *MastodonClient) Post(ctx context.Context, status string) error {
+func (m *MastodonClient) Post(ctx context.Context, status uint64) error {
 	_, err := m.c.PostStatus(ctx, &mastodon.Toot{
-		Status: status,
+		Status: fmt.Sprintf("%d", status),
 	})
 
 	return err
