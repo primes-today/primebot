@@ -11,9 +11,11 @@ support is not implemented.
 
 You can follow the magic at:
 
-* Mastodon: [@primes](https://botsin.space/@primes)
+* Mastodon: [@primes](https://botsin.space/@primes) on the [botsin.space][]
+  instance
 * Twitter: [@\_primes\_](https://twitter.com/_primes_)
 
 [mastodon]: https://joinmastodon.org/
 [twitter]: https://twitter.com/
 [primes]: https://github.com/fardog/_primes_/
+[botsin.space]: https://botsin.space/
