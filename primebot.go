@@ -49,7 +49,11 @@ type PrimeBot struct {
 }
 
 func (p *PrimeBot) Start(ctx context.Context) error {
-	cur, err := p.ftc.Fetch(ctx)
+	p.log.Print("fetching initial list of statuses")
+
+	fetchctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+	cur, err := p.ftc.Fetch(fetchctx)
 	if err != nil {
 		return err
 	}

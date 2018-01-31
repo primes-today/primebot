@@ -17,7 +17,7 @@ type MastodonConfig struct {
 	AccountID    string
 }
 
-func NewMastodonClient(config *MastodonConfig) (*MastodonClient, error) {
+func NewMastodonClient(ctx context.Context, config *MastodonConfig) (*MastodonClient, error) {
 	mconfig := &mastodon.Config{
 		Server:       config.Server,
 		ClientID:     config.ClientID,
@@ -26,9 +26,14 @@ func NewMastodonClient(config *MastodonConfig) (*MastodonClient, error) {
 	}
 	c := mastodon.NewClient(mconfig)
 
+	act, err := c.GetAccountCurrentUser(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return &MastodonClient{
 		c:  c,
-		id: mastodon.ID(config.AccountID),
+		id: act.ID,
 	}, nil
 }
 
@@ -60,9 +65,11 @@ func (m *MastodonClient) Fetch(ctx context.Context) (*Status, error) {
 }
 
 func (m *MastodonClient) Post(ctx context.Context, status uint64) error {
-	_, err := m.c.PostStatus(ctx, &mastodon.Toot{
-		Status: fmt.Sprintf("%d", status),
-	})
+	// _, err := m.c.PostStatus(ctx, &mastodon.Toot{
+	// 	Status: fmt.Sprintf("%d", status),
+	// })
+	fmt.Printf("would post %d\n", status)
 
-	return err
+	// return err
+	return nil
 }
