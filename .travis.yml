@@ -1,0 +1,11 @@
+language: go
+go:
+- 1.9
+- tip
+install:
+- go get -u -v github.com/fardog/primebot
+- go get -u -v github.com/fardog/primebot/cmd/primebot-mastodon
+# - go get -u -v github.com/fardog/primebot/cmd/primebot-twitter
+- go get -u -v github.com/fardog/primebot/cmd/primebot-stdout
+script:
+- go test -v
