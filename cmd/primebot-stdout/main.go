@@ -3,8 +3,10 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"syscall"
 	"time"
 
@@ -20,6 +22,14 @@ var (
 )
 
 func main() {
+	flag.Usage = func() {
+		_, exe := filepath.Split(os.Args[0])
+		fmt.Fprint(os.Stderr, "A stdout generator for testing primebot.")
+		fmt.Fprintf(os.Stderr, "Usage:\n\n  %s [options]\n\nOptions:\n\n", exe)
+		flag.PrintDefaults()
+	}
+	flag.Parse()
+
 	f := primebot.NewRandFetcher()
 	t := primebot.NewIntervalTicker(*interval)
 	r := &primebot.PlainFormat{}
