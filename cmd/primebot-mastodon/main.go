@@ -81,7 +81,7 @@ func main() {
 
 	ctx, cancel := context.WithCancel(context.Background())
 	go func() {
-		bot.Start(ctx)
+		logger.Fatal(bot.Start(ctx))
 	}()
 
 	// run until exit

@@ -58,10 +58,9 @@ func (p *PrimeBot) Start(ctx context.Context) error {
 		return err
 	}
 
-	st := cur.ts.Sub(time.Now())
-
-	next := time.Now().Add(st)
-	p.log.Printf("retrieved status %v; next post at %v", cur, next)
+	next := cur.ts.Add(p.tck.Interval())
+	st := next.Sub(time.Now())
+	p.log.Printf("retrieved status \"%d\"; next post in %v", cur.num, st)
 
 	p.gen.SetStart(cur.num + 1)
 	t := p.tck.Start(ctx, st)
@@ -86,7 +85,7 @@ func (p *PrimeBot) Start(ctx context.Context) error {
 			if err != nil {
 				return err
 			}
-			p.log.Printf("posted status %v", status)
+			p.log.Printf("posted status \"%d\"; next post in %v", status, p.tck.Interval())
 		case err := <-er:
 			p.log.Printf("error received from generator, %v. stopping", err)
 			return err

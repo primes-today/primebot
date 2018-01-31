@@ -7,6 +7,7 @@ import (
 
 type Ticker interface {
 	Start(context.Context, time.Duration) chan time.Time
+	Interval() time.Duration
 }
 
 func NewIntervalTicker(d time.Duration) *IntervalTicker {
@@ -42,4 +43,8 @@ func (i *IntervalTicker) Start(ctx context.Context, first time.Duration) (c chan
 	}()
 
 	return c
+}
+
+func (i IntervalTicker) Interval() time.Duration {
+	return i.interval
 }
