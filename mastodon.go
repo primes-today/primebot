@@ -87,10 +87,9 @@ func (m *MastodonClient) Fetch(ctx context.Context) (*Status, error) {
 }
 
 func (m *MastodonClient) Post(ctx context.Context, status uint64) error {
-	// _, err := m.c.PostStatus(ctx, &mastodon.Toot{
-	// 	Status: fmt.Sprintf("%d", status),
-	// })
+	_, err := m.c.PostStatus(ctx, &mastodon.Toot{
+		Status: fmt.Sprintf("%d", status),
+	})
 
-	// return err
-	return nil
+	return err
 }
