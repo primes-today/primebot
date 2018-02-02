@@ -17,7 +17,8 @@ type Bot interface {
 }
 
 type BotOpts struct {
-	Logger *log.Logger
+	Logger         *log.Logger
+	ServiceTimeout time.Duration
 }
 
 func NewPrimeBot(f Fetcher, t Ticker, g Generator, p Poster, opts *BotOpts) *PrimeBot {
@@ -27,6 +28,9 @@ func NewPrimeBot(f Fetcher, t Ticker, g Generator, p Poster, opts *BotOpts) *Pri
 
 	if opts.Logger == nil {
 		opts.Logger = log.New(&noopWriter{}, "", 0)
+	}
+	if opts.ServiceTimeout == 0 {
+		opts.ServiceTimeout = 30 * time.Second
 	}
 
 	return &PrimeBot{
@@ -51,8 +55,11 @@ type PrimeBot struct {
 func (p *PrimeBot) Start(ctx context.Context) error {
 	p.log.Print("fetching initial list of statuses")
 
-	fetchctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	defer cancel()
+	fetchctx, cancel := context.WithTimeout(
+		context.Background(),
+		p.opts.ServiceTimeout,
+	)
+	cancel() // cancel to avoid leaking
 	cur, err := p.ftc.Fetch(fetchctx)
 	if err != nil {
 		return err
@@ -81,7 +88,12 @@ func (p *PrimeBot) Start(ctx context.Context) error {
 		select {
 		case <-t:
 			status := <-pc
-			err := p.pst.Post(ctx, status)
+			postctx, cancel := context.WithTimeout(
+				context.Background(),
+				p.opts.ServiceTimeout,
+			)
+			err := p.pst.Post(postctx, status)
+			cancel() // cancel to avoid leaking
 			if err != nil {
 				return err
 			}

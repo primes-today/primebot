@@ -20,6 +20,11 @@ var (
 		1*time.Hour,
 		"Interval at which primes should be posted.",
 	)
+	serviceTimeout = flag.Duration(
+		"service-timeout",
+		30*time.Second,
+		"Timeouts used when communicating with the Mastodon server.",
+	)
 	server = flag.String(
 		"server",
 		os.Getenv("MASTODON_SERVER"),
@@ -76,7 +81,8 @@ func main() {
 	g := primebot.NewProbablyPrimeGenerator(0)
 
 	bot := primebot.NewPrimeBot(client, t, g, client, &primebot.BotOpts{
-		Logger: logger,
+		Logger:         logger,
+		ServiceTimeout: *serviceTimeout,
 	})
 
 	ctx, cancel := context.WithCancel(context.Background())
