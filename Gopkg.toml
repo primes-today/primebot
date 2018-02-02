@@ -24,3 +24,11 @@
 [[constraint]]
   name = "github.com/mattn/go-mastodon"
   version = "0.0.2"
+
+[[constraint]]
+  name = "github.com/dghubble/oauth1"
+  version = "0.4.0"
+
+[[constraint]]
+  name = "github.com/dghubble/go-twitter"
+  revision = "c4115fa44a928413e0b857e0eb47376ffde3a61a"
