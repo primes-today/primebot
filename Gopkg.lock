@@ -2,6 +2,35 @@
 
 
 [[projects]]
+  name = "github.com/cenkalti/backoff"
+  packages = ["."]
+  revision = "61153c768f31ee5f130071d08fc82b85208528de"
+  version = "v1.1.0"
+
+[[projects]]
+  name = "github.com/dghubble/go-twitter"
+  packages = ["twitter"]
+  revision = "c4115fa44a928413e0b857e0eb47376ffde3a61a"
+
+[[projects]]
+  name = "github.com/dghubble/oauth1"
+  packages = ["."]
+  revision = "70562a5920ad9b6ff03ef697c0f90ae569abbd2b"
+  version = "v0.4.0"
+
+[[projects]]
+  name = "github.com/dghubble/sling"
+  packages = ["."]
+  revision = "eb56e89ac5088bebb12eef3cb4b293300f43608b"
+  version = "v1.1.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/google/go-querystring"
+  packages = ["query"]
+  revision = "53e6ce116135b80d037921a7fdd5138cf32d7a8a"
+
+[[projects]]
   name = "github.com/gorilla/websocket"
   packages = ["."]
   revision = "ea4d1f681babbce9545c9c5f3d5194a789c89f5b"
@@ -19,9 +48,15 @@
   revision = "6953a30d444317754766fccdd3f7f000edc874f6"
   version = "0.1.0"
 
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/net"
+  packages = ["context"]
+  revision = "b417086c80e91bfa321ef761574721644b8b9f61"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "dd9be9fdd1fe04eac485cac807e5e538214e916e4799a6923140417b262a25f4"
+  inputs-digest = "acc65d99f17f537753a00c96b6ddbc61b0e68f3b32f78a2fbf7e38588e41e280"
   solver-name = "gps-cdcl"
   solver-version = 1
