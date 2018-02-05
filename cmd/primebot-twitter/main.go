@@ -64,6 +64,7 @@ func main() {
 	token := oauth1.NewToken(*accessToken, *accessSecret)
 	// OAuth1 http.Client will automatically authorize Requests
 	httpClient := config.Client(oauth1.NoContext, token)
+	// go-twitter doesn't support contexts; must set timeout on the http client
 	httpClient.Timeout = *serviceTimeout
 
 	client, err := primebot.NewTwitterClient(httpClient)

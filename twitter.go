@@ -32,7 +32,7 @@ type TwitterClient struct {
 	u *twitter.User
 }
 
-func (t *TwitterClient) Fetch(ctx context.Context) (*Status, error) {
+func (t *TwitterClient) Fetch(_ context.Context) (*Status, error) {
 	ss, _, err := t.c.Timelines.UserTimeline(&twitter.UserTimelineParams{
 		UserID:          t.u.ID,
 		Count:           1,
@@ -63,7 +63,7 @@ func (t *TwitterClient) Fetch(ctx context.Context) (*Status, error) {
 	}, nil
 }
 
-func (t *TwitterClient) Post(ctx context.Context, status uint64) error {
+func (t *TwitterClient) Post(_ context.Context, status uint64) error {
 	_, _, err := t.c.Statuses.Update(fmt.Sprintf("%d", status), nil)
 	return err
 }
