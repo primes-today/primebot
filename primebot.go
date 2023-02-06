@@ -65,11 +65,11 @@ func (p *PrimeBot) Start(ctx context.Context) error {
 		return err
 	}
 
-	next := cur.ts.Add(p.tck.Interval())
-	st := next.Sub(time.Now())
-	p.log.Printf("retrieved status \"%d\"; next post in %v", cur.num, st)
+	next := cur.Posted.Add(p.tck.Interval())
+	st := time.Until(next)
+	p.log.Printf("retrieved status \"%d\"; next post in %v", cur.LastStatus, st)
 
-	p.gen.SetStart(cur.num + 1)
+	p.gen.SetStart(cur.LastStatus + 1)
 	t := p.tck.Start(ctx, st)
 	pc := make(chan uint64, 1)
 	er := make(chan error)
@@ -103,7 +103,7 @@ func (p *PrimeBot) Start(ctx context.Context) error {
 			return err
 		case <-ctx.Done():
 			p.log.Print("context done, shutting down")
-			break
+			return nil
 		}
 	}
 }
