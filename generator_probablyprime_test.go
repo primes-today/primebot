@@ -8,9 +8,9 @@ import (
 func TestProbablyPrimeGenerator(t *testing.T) {
 	ctx := context.Background()
 	cases := map[uint64][]uint64{
-		0: []uint64{2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31},
-		7: []uint64{7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43},
-		6: []uint64{7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43},
+		0: {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31},
+		7: {7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43},
+		6: {7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43},
 	}
 
 	for start, expected := range cases {

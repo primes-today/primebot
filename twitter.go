@@ -58,8 +58,8 @@ func (t *TwitterClient) Fetch(_ context.Context) (*Status, error) {
 	}
 
 	return &Status{
-		num: n,
-		ts:  ts,
+		LastStatus: n,
+		Posted:     ts,
 	}, nil
 }
 

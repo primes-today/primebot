@@ -81,8 +81,8 @@ func (m *MastodonClient) Fetch(ctx context.Context) (*Status, error) {
 	}
 
 	return &Status{
-		num: n,
-		ts:  s.CreatedAt,
+		LastStatus: n,
+		Posted:     s.CreatedAt,
 	}, nil
 }
 

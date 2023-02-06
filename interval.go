@@ -37,7 +37,7 @@ func (i *IntervalTicker) Start(ctx context.Context, first time.Duration) (c chan
 				c <- tt
 			case <-ctx.Done():
 				t.Stop()
-				break
+				return
 			}
 		}
 	}()

@@ -7,8 +7,8 @@ import (
 )
 
 type Status struct {
-	num uint64
-	ts  time.Time
+	LastStatus uint64
+	Posted     time.Time
 }
 
 type Fetcher interface {
@@ -27,7 +27,7 @@ type RandFetcher struct {
 func (r *RandFetcher) Fetch(ctx context.Context) (*Status, error) {
 	now := time.Now()
 	return &Status{
-		num: r.r.Uint64(),
-		ts:  now.Add(-10 * time.Second),
+		LastStatus: r.r.Uint64(),
+		Posted:     now.Add(-10 * time.Second),
 	}, nil
 }
