@@ -22,6 +22,11 @@ var (
 		1*time.Hour,
 		"Interval at which primes should be posted.",
 	)
+	serviceTimeout = flag.Duration(
+		"service-timeout",
+		30*time.Second,
+		"Timeouts used when communicating with Twitter.",
+	)
 	consumerKey = flag.String(
 		"consumer-key",
 		os.Getenv("TWITTER_CONSUMER_KEY"),
@@ -59,6 +64,8 @@ func main() {
 	token := oauth1.NewToken(*accessToken, *accessSecret)
 	// OAuth1 http.Client will automatically authorize Requests
 	httpClient := config.Client(oauth1.NoContext, token)
+	// go-twitter doesn't support contexts; must set timeout on the http client
+	httpClient.Timeout = *serviceTimeout
 
 	client, err := primebot.NewTwitterClient(httpClient)
 	if err != nil {
