@@ -13,6 +13,7 @@ You can follow the magic at:
 * Mastodon: [@primes](https://botsin.space/@primes) on the [botsin.space][]
   instance
 * Twitter: [@\_primes\_](https://twitter.com/_primes_)
+* Web/RSS: [https://primes.today](https://primes.today)
 
 [mastodon]: https://joinmastodon.org/
 [twitter]: https://twitter.com/
