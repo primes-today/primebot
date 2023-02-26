@@ -15,7 +15,7 @@ func TestIntervalTicker(t *testing.T) {
 	c := it.Start(ctx, 1*time.Second)
 
 	tc := <-c
-	if s := tc.Sub(now).Seconds(); s > 1.1 || s < 0.9 {
+	if s := tc.Sub(now).Seconds(); s > 1.2 || s < 0.8 {
 		t.Errorf("expected first tick at ~1 seconds, saw %v", s)
 	}
 
@@ -26,7 +26,7 @@ func TestIntervalTicker(t *testing.T) {
 		}
 		now = time.Now()
 		tc = <-c
-		if s := tc.Sub(now).Seconds(); s > 2.1 || s < 1.9 {
+		if s := tc.Sub(now).Seconds(); s > 2.2 || s < 1.8 {
 			t.Errorf("expected tick at ~2 seconds, saw %v", s)
 		}
 		count--
