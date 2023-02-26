@@ -11,11 +11,13 @@ func NewTrialDivisionGenerator(start uint64) *TrialDivisionGenerator {
 	cur.SetUint64(start)
 	zero := big.NewInt(0)
 	one := big.NewInt(1)
+	two := big.NewInt(2)
 
 	return &TrialDivisionGenerator{
 		cur:   cur,
 		zero:  zero,
 		one:   one,
+		two:   two,
 		mutex: &sync.Mutex{},
 	}
 }
@@ -24,6 +26,7 @@ type TrialDivisionGenerator struct {
 	cur   *big.Int
 	zero  *big.Int
 	one   *big.Int
+	two   *big.Int
 	mutex *sync.Mutex
 }
 
@@ -63,6 +66,7 @@ func (t *TrialDivisionGenerator) Generate(ctx context.Context) (uint64, error) {
 			}
 
 			trial.SetUint64(2)
+			first := true
 			max.Sqrt(t.cur)
 
 		OUTER:
@@ -77,7 +81,12 @@ func (t *TrialDivisionGenerator) Generate(ctx context.Context) (uint64, error) {
 					if mod.Mod(t.cur, trial).Cmp(t.zero) == 0 {
 						break OUTER
 					}
-					trial.Add(trial, t.one)
+					if first {
+						trial.Add(trial, t.one)
+						first = false
+					} else {
+						trial.Add(trial, t.two)
+					}
 				}
 			}
 

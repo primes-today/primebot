@@ -5,8 +5,8 @@ import (
 	"testing"
 )
 
-// 50 years of hourly postings, ignoring leap years
-const MAX_PRIMES = 50 * 365 * 24
+// 100 years of hourly postings, ignoring leap years
+const MAX_PRIMES = 100 * 365 * 24
 
 func TestGeneratorsIdentical(t *testing.T) {
 	ctx := context.Background()
