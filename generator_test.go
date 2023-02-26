@@ -16,18 +16,13 @@ func TestGeneratorsIdentical(t *testing.T) {
 
 	count := 0
 	for {
-		p1, err1 := td.Generate(ctx)
-		p2, err2 := pp.Generate(ctx)
-		if err1 != nil {
-			if err1 == err2 && err1 == ErrOverflow {
-				// success
-				return
-			}
-
-			t.Fatal(err1)
+		p1, err := td.Generate(ctx)
+		if err != nil {
+			t.Fatal(err)
 		}
-		if err2 != nil {
-			t.Fatal(err2)
+		p2, err := pp.Generate(ctx)
+		if err != nil {
+			t.Fatal(err)
 		}
 
 		if p1 != p2 {
@@ -36,7 +31,7 @@ func TestGeneratorsIdentical(t *testing.T) {
 
 		count = count + 1
 		if count >= MAX_PRIMES {
-			// done
+			// successfully reached count of equal primes
 			return
 		}
 	}
