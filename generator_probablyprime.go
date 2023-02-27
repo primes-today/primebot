@@ -8,9 +8,9 @@ import (
 
 // NewProbablyPrimeGenerator creates a new ProbablyPrimeGenerator, starting at
 // the given number
-func NewProbablyPrimeGenerator(start uint64) *ProbablyPrimeGenerator {
+func NewProbablyPrimeGenerator(start *big.Int) *ProbablyPrimeGenerator {
 	cur := &big.Int{}
-	cur.SetUint64(start)
+	cur.Set(start)
 	one := big.NewInt(1)
 
 	return &ProbablyPrimeGenerator{
@@ -30,29 +30,31 @@ type ProbablyPrimeGenerator struct {
 	mutex *sync.Mutex
 }
 
-func (p *ProbablyPrimeGenerator) SetStart(start uint64) {
+func (p *ProbablyPrimeGenerator) SetStart(start *big.Int) {
 	p.mutex.Lock()
 	defer p.mutex.Unlock()
 	cur := &big.Int{}
-	cur.SetUint64(start)
+	cur.Set(start)
 	p.cur = cur
 }
 
 // Generate generates the next prime number from the ProbablyPrime generator
-func (p *ProbablyPrimeGenerator) Generate(ctx context.Context) (uint64, error) {
+func (p *ProbablyPrimeGenerator) Generate(ctx context.Context) (*big.Int, error) {
 	defer p.cur.Add(p.cur, p.one)
 	p.mutex.Lock()
 	defer p.mutex.Unlock()
+
+	ret := &big.Int{}
 	for {
 		select {
 		case <-ctx.Done():
-			return 0, ErrCanceled
+			return ret, ErrCanceled
 		default:
 			if !p.cur.IsUint64() {
-				return 0, ErrOverflow
+				return ret, ErrOverflow
 			}
 			if p.cur.ProbablyPrime(1) {
-				return p.cur.Uint64(), nil
+				return ret.Set(p.cur), nil
 			}
 			p.cur.Add(p.cur, p.one)
 		}

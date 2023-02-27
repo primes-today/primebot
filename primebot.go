@@ -3,6 +3,7 @@ package primebot
 import (
 	"context"
 	"log"
+	"math/big"
 	"time"
 )
 
@@ -69,9 +70,11 @@ func (p *PrimeBot) Start(ctx context.Context) error {
 	st := time.Until(next)
 	p.log.Printf("retrieved status \"%d\"; next post in %v", cur.LastStatus, st)
 
-	p.gen.SetStart(cur.LastStatus + 1)
+	ns := &big.Int{}
+	ns.Set(cur.LastStatus)
+	p.gen.SetStart(ns.Add(ns, big.NewInt(1)))
 	t := p.tck.Start(ctx, st)
-	pc := make(chan uint64, 1)
+	pc := make(chan *big.Int, 1)
 	er := make(chan error)
 	go func() {
 		for {

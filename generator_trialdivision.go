@@ -6,9 +6,9 @@ import (
 	"sync"
 )
 
-func NewTrialDivisionGenerator(start uint64) *TrialDivisionGenerator {
+func NewTrialDivisionGenerator(start *big.Int) *TrialDivisionGenerator {
 	cur := &big.Int{}
-	cur.SetUint64(start)
+	cur.Set(start)
 	zero := big.NewInt(0)
 	one := big.NewInt(1)
 	two := big.NewInt(2)
@@ -30,26 +30,27 @@ type TrialDivisionGenerator struct {
 	mutex *sync.Mutex
 }
 
-func (t *TrialDivisionGenerator) SetStart(start uint64) {
+func (t *TrialDivisionGenerator) SetStart(start *big.Int) {
 	t.mutex.Lock()
 	defer t.mutex.Unlock()
 	cur := &big.Int{}
-	cur.SetUint64(start)
+	cur.Set(start)
 	t.cur = cur
 }
 
-func (t *TrialDivisionGenerator) Generate(ctx context.Context) (uint64, error) {
-	trial := big.NewInt(2)
-	mod := &big.Int{}
-	max := &big.Int{}
-
+func (t *TrialDivisionGenerator) Generate(ctx context.Context) (*big.Int, error) {
 	defer t.cur.Add(t.cur, t.one)
 	t.mutex.Lock()
 	defer t.mutex.Unlock()
 
+	ret := &big.Int{}
+	trial := big.NewInt(2)
+	mod := &big.Int{}
+	max := &big.Int{}
+
 	// handle == 2
 	if t.cur.Cmp(trial) == 0 {
-		return t.cur.Uint64(), nil
+		return ret.Set(t.cur), nil
 	}
 	// handle < 2
 	if t.cur.Cmp(trial) < 0 {
@@ -59,12 +60,8 @@ func (t *TrialDivisionGenerator) Generate(ctx context.Context) (uint64, error) {
 	for {
 		select {
 		case <-ctx.Done():
-			return 0, ErrCanceled
+			return ret, ErrCanceled
 		default:
-			if !t.cur.IsUint64() {
-				return 0, ErrOverflow
-			}
-
 			trial.SetUint64(2)
 			first := true
 			max.Sqrt(t.cur)
@@ -73,10 +70,10 @@ func (t *TrialDivisionGenerator) Generate(ctx context.Context) (uint64, error) {
 			for {
 				select {
 				case <-ctx.Done():
-					return 0, ErrCanceled
+					return ret, ErrCanceled
 				default:
 					if trial.Cmp(max) > 0 {
-						return t.cur.Uint64(), nil
+						return ret.Set(t.cur), nil
 					}
 					if mod.Mod(t.cur, trial).Cmp(t.zero) == 0 {
 						break OUTER

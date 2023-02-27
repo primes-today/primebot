@@ -3,6 +3,7 @@ package primebot
 import (
 	"context"
 	"errors"
+	"math/big"
 )
 
 var (
@@ -14,6 +15,6 @@ var (
 )
 
 type Generator interface {
-	SetStart(uint64)
-	Generate(context.Context) (uint64, error)
+	SetStart(*big.Int)
+	Generate(context.Context) (*big.Int, error)
 }

@@ -4,11 +4,12 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"math/big"
 	"os"
 )
 
 type Poster interface {
-	Post(context.Context, uint64) error
+	Post(context.Context, *big.Int) error
 }
 
 func NewWriterPoster(w io.Writer) *WritePoster {
@@ -23,7 +24,7 @@ type WritePoster struct {
 	w io.Writer
 }
 
-func (w *WritePoster) Post(ctx context.Context, status uint64) error {
-	_, err := fmt.Fprintf(w.w, "%d\n", status)
+func (w *WritePoster) Post(ctx context.Context, status *big.Int) error {
+	_, err := fmt.Fprintf(w.w, "%s\n", status.Text(10))
 	return err
 }
