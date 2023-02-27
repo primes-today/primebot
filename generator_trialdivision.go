@@ -39,9 +39,10 @@ func (t *TrialDivisionGenerator) SetStart(start *big.Int) {
 }
 
 func (t *TrialDivisionGenerator) Generate(ctx context.Context) (*big.Int, error) {
-	defer t.cur.Add(t.cur, t.one)
 	t.mutex.Lock()
 	defer t.mutex.Unlock()
+
+	t.cur.Add(t.cur, t.one)
 
 	ret := &big.Int{}
 	trial := big.NewInt(2)

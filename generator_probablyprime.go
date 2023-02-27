@@ -40,9 +40,10 @@ func (p *ProbablyPrimeGenerator) SetStart(start *big.Int) {
 
 // Generate generates the next prime number from the ProbablyPrime generator
 func (p *ProbablyPrimeGenerator) Generate(ctx context.Context) (*big.Int, error) {
-	defer p.cur.Add(p.cur, p.one)
 	p.mutex.Lock()
 	defer p.mutex.Unlock()
+
+	p.cur.Add(p.cur, p.one)
 
 	ret := &big.Int{}
 	for {

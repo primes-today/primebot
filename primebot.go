@@ -70,9 +70,7 @@ func (p *PrimeBot) Start(ctx context.Context) error {
 	st := time.Until(next)
 	p.log.Printf("retrieved status \"%d\"; next post in %v", cur.LastStatus, st)
 
-	ns := &big.Int{}
-	ns.Set(cur.LastStatus)
-	p.gen.SetStart(ns.Add(ns, big.NewInt(1)))
+	p.gen.SetStart(cur.LastStatus)
 	t := p.tck.Start(ctx, st)
 	pc := make(chan *big.Int, 1)
 	er := make(chan error)

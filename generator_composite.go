@@ -48,9 +48,7 @@ func (c *CompositeGenerator) Generate(ctx context.Context) (*big.Int, error) {
 		}
 
 		for _, gen := range c.gen {
-			start := &big.Int{}
-			start.Set(n)
-			gen.SetStart(start.Add(start, c.one))
+			gen.SetStart(n)
 		}
 
 		return n, err
