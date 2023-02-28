@@ -27,7 +27,7 @@ func TestGeneratorsIdentical(t *testing.T) {
 		}
 
 		if p1.Cmp(p2) != 0 {
-			t.Errorf("got unequal primes; p1: %d, p2: %d", p1, p2)
+			t.Fatalf("got unequal primes; p1: %d, p2: %d", p1, p2)
 		}
 
 		count = count + 1
