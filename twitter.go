@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"math/big"
 	"net/http"
-	"strconv"
 
 	"github.com/dghubble/go-twitter/twitter"
 )
@@ -33,6 +33,7 @@ type TwitterClient struct {
 }
 
 func (t *TwitterClient) Fetch(_ context.Context) (*Status, error) {
+	n := &big.Int{}
 	ss, _, err := t.c.Timelines.UserTimeline(&twitter.UserTimelineParams{
 		UserID:          t.u.ID,
 		Count:           1,
@@ -47,9 +48,9 @@ func (t *TwitterClient) Fetch(_ context.Context) (*Status, error) {
 	}
 
 	s := ss[0]
-	n, err := strconv.ParseUint(s.Text, 10, 64)
-	if err != nil {
-		return nil, err
+	n, success := n.SetString(s.Text, 10)
+	if !success {
+		return nil, fmt.Errorf("unable to convert status to bigint: %s", s.Text)
 	}
 
 	ts, err := s.CreatedAtTime()
@@ -63,7 +64,7 @@ func (t *TwitterClient) Fetch(_ context.Context) (*Status, error) {
 	}, nil
 }
 
-func (t *TwitterClient) Post(_ context.Context, status uint64) error {
-	_, _, err := t.c.Statuses.Update(fmt.Sprintf("%d", status), nil)
+func (t *TwitterClient) Post(_ context.Context, status *big.Int) error {
+	_, _, err := t.c.Statuses.Update(status.Text(10), nil)
 	return err
 }

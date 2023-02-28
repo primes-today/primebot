@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math/big"
 	"os"
 	"os/signal"
 	"path/filepath"
@@ -78,7 +79,7 @@ func main() {
 	}
 
 	t := primebot.NewIntervalTicker(*interval)
-	g := primebot.NewProbablyPrimeGenerator(0)
+	g := primebot.NewProbablyPrimeGenerator(big.NewInt(0))
 
 	bot := primebot.NewPrimeBot(client, t, g, client, &primebot.BotOpts{
 		Logger:         logger,

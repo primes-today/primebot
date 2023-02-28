@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"math/big"
 	"os"
 	"os/signal"
 	"path/filepath"
@@ -32,7 +33,7 @@ func main() {
 
 	f := primebot.NewRandFetcher()
 	t := primebot.NewIntervalTicker(*interval)
-	g := primebot.NewProbablyPrimeGenerator(0)
+	g := primebot.NewProbablyPrimeGenerator(big.NewInt(0))
 	p := primebot.NewStdoutPoster()
 
 	bot := primebot.NewPrimeBot(f, t, g, p, nil)

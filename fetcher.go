@@ -2,12 +2,13 @@ package primebot
 
 import (
 	"context"
+	"math/big"
 	"math/rand"
 	"time"
 )
 
 type Status struct {
-	LastStatus uint64
+	LastStatus *big.Int
 	Posted     time.Time
 }
 
@@ -26,8 +27,10 @@ type RandFetcher struct {
 
 func (r *RandFetcher) Fetch(ctx context.Context) (*Status, error) {
 	now := time.Now()
+	last := &big.Int{}
+
 	return &Status{
-		LastStatus: r.r.Uint64(),
+		LastStatus: last.SetUint64(r.r.Uint64()),
 		Posted:     now.Add(-10 * time.Second),
 	}, nil
 }

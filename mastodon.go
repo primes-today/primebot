@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"math/big"
 	"regexp"
-	"strconv"
 
 	mastodon "github.com/mattn/go-mastodon"
 )
@@ -47,18 +47,20 @@ type MastodonClient struct {
 	id mastodon.ID
 }
 
-func (m *MastodonClient) parseStatus(status string) (uint64, error) {
+func (m *MastodonClient) parseStatus(status string) (*big.Int, error) {
+	n := &big.Int{}
+
 	ss := MastodonStatusRex.FindStringSubmatch(status)
 	if l := len(ss); l != 2 {
-		return 0, fmt.Errorf("unexpected number of matches: %v", l)
+		return n, fmt.Errorf("unexpected number of matches: %v", l)
 	}
 	s := ss[1]
 	if s == "" {
-		return 0, errors.New("did not find substring match")
+		return n, errors.New("did not find substring match")
 	}
-	n, err := strconv.ParseUint(s, 10, 64)
-	if err != nil {
-		return 0, err
+	n, success := n.SetString(s, 10)
+	if !success {
+		return n, fmt.Errorf("unable to convert status to bigint: %s", s)
 	}
 
 	return n, nil
@@ -86,9 +88,9 @@ func (m *MastodonClient) Fetch(ctx context.Context) (*Status, error) {
 	}, nil
 }
 
-func (m *MastodonClient) Post(ctx context.Context, status uint64) error {
+func (m *MastodonClient) Post(ctx context.Context, status *big.Int) error {
 	_, err := m.c.PostStatus(ctx, &mastodon.Toot{
-		Status: fmt.Sprintf("%d", status),
+		Status: status.Text(10),
 	})
 
 	return err

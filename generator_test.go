@@ -2,6 +2,7 @@ package primebot
 
 import (
 	"context"
+	"math/big"
 	"testing"
 )
 
@@ -11,8 +12,8 @@ const MAX_PRIMES = 100 * 365 * 24
 func TestGeneratorsIdentical(t *testing.T) {
 	ctx := context.Background()
 
-	td := NewTrialDivisionGenerator(0)
-	pp := NewProbablyPrimeGenerator(0)
+	td := NewTrialDivisionGenerator(big.NewInt(0))
+	pp := NewProbablyPrimeGenerator(big.NewInt(0))
 
 	count := 0
 	for {
@@ -25,8 +26,8 @@ func TestGeneratorsIdentical(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		if p1 != p2 {
-			t.Errorf("got unequal primes; p1: %d, p2: %d", p1, p2)
+		if p1.Cmp(p2) != 0 {
+			t.Fatalf("got unequal primes; p1: %d, p2: %d", p1, p2)
 		}
 
 		count = count + 1
