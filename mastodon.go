@@ -14,6 +14,11 @@ var (
 	MastodonStatusRex = regexp.MustCompile(`^<p>([0-9]+)</p>$`)
 )
 
+type MastodonPrimesClient interface {
+	GetAccountStatuses(context.Context, mastodon.ID, *mastodon.Pagination) ([]*mastodon.Status, error)
+	PostStatus(context.Context, *mastodon.Toot) (*mastodon.Status, error)
+}
+
 type MastodonConfig struct {
 	Server       string
 	ClientID     string
@@ -43,7 +48,7 @@ func NewMastodonClient(ctx context.Context, config *MastodonConfig) (*MastodonCl
 }
 
 type MastodonClient struct {
-	c  *mastodon.Client
+	c  MastodonPrimesClient
 	id mastodon.ID
 }
 

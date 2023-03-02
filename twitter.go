@@ -10,6 +10,14 @@ import (
 	"github.com/dghubble/go-twitter/twitter"
 )
 
+type TwitterPrimesTimelineService interface {
+	UserTimeline(*twitter.UserTimelineParams) ([]twitter.Tweet, *http.Response, error)
+}
+
+type TwitterPrimesStatusService interface {
+	Update(string, *twitter.StatusUpdateParams) (*twitter.Tweet, *http.Response, error)
+}
+
 func NewTwitterClient(c *http.Client) (*TwitterClient, error) {
 	client := twitter.NewClient(c)
 	verifyParams := &twitter.AccountVerifyParams{
@@ -22,19 +30,21 @@ func NewTwitterClient(c *http.Client) (*TwitterClient, error) {
 	}
 
 	return &TwitterClient{
-		c: client,
+		t: client.Timelines,
+		s: client.Statuses,
 		u: user,
 	}, nil
 }
 
 type TwitterClient struct {
-	c *twitter.Client
+	t TwitterPrimesTimelineService
+	s TwitterPrimesStatusService
 	u *twitter.User
 }
 
 func (t *TwitterClient) Fetch(_ context.Context) (*Status, error) {
 	n := &big.Int{}
-	ss, _, err := t.c.Timelines.UserTimeline(&twitter.UserTimelineParams{
+	ss, _, err := t.t.UserTimeline(&twitter.UserTimelineParams{
 		UserID:          t.u.ID,
 		Count:           1,
 		ExcludeReplies:  twitter.Bool(true),
@@ -65,6 +75,6 @@ func (t *TwitterClient) Fetch(_ context.Context) (*Status, error) {
 }
 
 func (t *TwitterClient) Post(_ context.Context, status *big.Int) error {
-	_, _, err := t.c.Statuses.Update(status.Text(10), nil)
+	_, _, err := t.s.Update(status.Text(10), nil)
 	return err
 }
