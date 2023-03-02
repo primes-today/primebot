@@ -2,6 +2,7 @@ package primebot
 
 import (
 	"context"
+	"errors"
 	"math/big"
 	"net/http"
 	"testing"
@@ -88,6 +89,70 @@ func TestTwitterFetch(t *testing.T) {
 	}
 }
 
+func TestTwitterFetchParseErr(t *testing.T) {
+	dtStr := time.Now().Format(time.RubyDate)
+	res := []twitter.Tweet{
+		{
+			Text:      "NaN",
+			CreatedAt: dtStr,
+			FullText:  "NaN",
+		},
+	}
+	tc := make(chan []twitter.Tweet, 1)
+	client := &mockTwitter{
+		tc,
+		make(chan *twitter.UserTimelineParams, 1),
+		make(chan string),
+		make(chan error),
+		make(chan error),
+	}
+
+	tc <- res
+
+	user := &twitter.User{
+		ID:    1000,
+		IDStr: "1000",
+	}
+	fetcher := TwitterClient{
+		t: client,
+		s: client,
+		u: user,
+	}
+
+	_, err := fetcher.Fetch(context.Background())
+	if err == nil {
+		t.Error("expected error, got none")
+	}
+}
+
+func TestTwitterFetchError(t *testing.T) {
+	e := make(chan error, 1)
+	client := &mockTwitter{
+		make(chan []twitter.Tweet, 1),
+		make(chan *twitter.UserTimelineParams, 1),
+		make(chan string),
+		e,
+		make(chan error),
+	}
+
+	user := &twitter.User{
+		ID:    1000,
+		IDStr: "1000",
+	}
+	fetcher := TwitterClient{
+		t: client,
+		s: client,
+		u: user,
+	}
+
+	e <- errors.New("wups")
+
+	_, err := fetcher.Fetch(context.Background())
+	if err == nil {
+		t.Error("expected error, got none")
+	}
+}
+
 func TestTwitterPost(t *testing.T) {
 	s := make(chan string, 1)
 	client := &mockTwitter{
@@ -116,5 +181,32 @@ func TestTwitterPost(t *testing.T) {
 	posted := <-s
 	if posted != "1050139" {
 		t.Errorf("unexpected status posted: %s", posted)
+	}
+}
+
+func TestTwitterPostErr(t *testing.T) {
+	e := make(chan error, 1)
+	client := &mockTwitter{
+		make(chan []twitter.Tweet),
+		make(chan *twitter.UserTimelineParams, 1),
+		make(chan string, 1),
+		make(chan error),
+		e,
+	}
+	user := &twitter.User{
+		ID:    1000,
+		IDStr: "1000",
+	}
+
+	status := big.NewInt(1050139)
+	poster := TwitterClient{
+		t: client,
+		s: client,
+		u: user,
+	}
+	e <- errors.New("dang")
+	err := poster.Post(context.Background(), status)
+	if err == nil {
+		t.Error("expected error, got none")
 	}
 }
