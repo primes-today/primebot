@@ -36,7 +36,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           flavor: |
             latest=auto
-            prefix=${{ matrix.package }},onlatest=true
+            prefix=${{ matrix.package }}-,onlatest=true
             suffix=
 
       - name: Build and push Docker image
