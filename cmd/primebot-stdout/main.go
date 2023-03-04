@@ -33,7 +33,7 @@ func main() {
 
 	f := primebot.NewRandFetcher()
 	t := primebot.NewIntervalTicker(*interval)
-	g := primebot.NewProbablyPrimeGenerator(big.NewInt(0))
+	g := primebot.NewCompositeGenerator(big.NewInt(0))
 	p := primebot.NewStdoutPoster()
 
 	bot := primebot.NewPrimeBot(f, t, g, p, nil)

@@ -74,7 +74,7 @@ func main() {
 	}
 
 	t := primebot.NewIntervalTicker(*interval)
-	g := primebot.NewProbablyPrimeGenerator(big.NewInt(0))
+	g := primebot.NewCompositeGenerator(big.NewInt(0))
 
 	bot := primebot.NewPrimeBot(client, t, g, client, &primebot.BotOpts{
 		Logger: logger,
