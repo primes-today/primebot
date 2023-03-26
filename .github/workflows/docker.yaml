@@ -3,9 +3,9 @@ name: Docker Image
 on:
   push:
     branches: 
-      - master
-    tags:
+      - main
   pull_request:
+  release:
 
 env:
   REGISTRY: ghcr.io
@@ -20,6 +20,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+    concurrency: image-build
 
     steps:
       - uses: actions/checkout@v3
