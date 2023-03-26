@@ -44,7 +44,7 @@ jobs:
             type=semver,pattern={{version}},prefix=${{ matrix.package }}-
             type=semver,pattern={{major}}.{{minor}},prefix=${{ matrix.package }}-
             type=semver,pattern={{major}},prefix=${{ matrix.package }}-
-            type=ref,event=pr,prefix=${{ matrix.package }}
+            type=ref,event=pr,prefix=${{ matrix.package }}-pr-
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
