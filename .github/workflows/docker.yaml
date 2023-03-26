@@ -3,9 +3,9 @@ name: Docker Image
 on:
   push:
     branches: 
-      - master
-    tags:
+      - main
   pull_request:
+  release:
 
 env:
   REGISTRY: ghcr.io
@@ -20,6 +20,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+    concurrency: image-build
 
     steps:
       - uses: actions/checkout@v3
@@ -44,6 +45,7 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
+            type=edge,branch=main
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
