@@ -56,7 +56,7 @@ var (
 func main() {
 	flag.Usage = func() {
 		_, exe := filepath.Split(os.Args[0])
-		fmt.Fprint(os.Stderr, "A stdout generator for testing primebot.")
+		fmt.Fprint(os.Stderr, "A Mastodon implementation for primebot.")
 		fmt.Fprintf(os.Stderr, "Usage:\n\n  %s [options]\n\nOptions:\n\n", exe)
 		flag.PrintDefaults()
 	}
@@ -79,7 +79,7 @@ func main() {
 	}
 
 	t := primebot.NewIntervalTicker(*interval)
-	g := primebot.NewProbablyPrimeGenerator(big.NewInt(0))
+	g := primebot.NewCompositeGenerator(big.NewInt(0))
 
 	bot := primebot.NewPrimeBot(client, t, g, client, &primebot.BotOpts{
 		Logger:         logger,
