@@ -1,4 +1,4 @@
-module github.com/fardog/primebot
+module github.com/primes-today/primebot
 
 go 1.20
 
