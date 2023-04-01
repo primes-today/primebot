@@ -2,12 +2,12 @@ FROM golang:1.20-alpine
 
 RUN apk --no-cache add ca-certificates && update-ca-certificates
 
-RUN mkdir -p /go/src/github.com/fardog/primebot
-COPY . /go/src/github.com/fardog/primebot
+RUN mkdir -p /go/src/github.com/primes-today/primebot
+COPY . /go/src/github.com/primes-today/primebot
 
-WORKDIR /go/src/github.com/fardog/primebot/cmd/primebot-mastodon
+WORKDIR /go/src/github.com/primes-today/primebot/cmd/primebot-mastodon
 RUN go install -v
 WORKDIR /go/bin
-RUN rm -rf /go/src/github.com/fardog/primebot
+RUN rm -rf /go/src/github.com/primes-today/primebot
 
 CMD primebot-mastodon --interval 1h

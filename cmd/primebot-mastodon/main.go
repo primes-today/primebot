@@ -12,7 +12,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/fardog/primebot"
+	"github.com/primes-today/primebot"
 )
 
 var (
