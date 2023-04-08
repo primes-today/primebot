@@ -72,7 +72,7 @@ func (p *PrimeBot) Start(ctx context.Context) error {
 
 	p.gen.SetStart(cur.LastStatus)
 	t := p.tck.Start(ctx, st)
-	pc := make(chan *big.Int, 1)
+	pc := make(chan *big.Int)
 	er := make(chan error)
 	go func() {
 		for {

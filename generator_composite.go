@@ -30,7 +30,7 @@ type CompositeGenerator struct {
 
 func (c *CompositeGenerator) SetStart(start *big.Int) {
 	c.mutex.Lock()
-	defer c.mutex.Lock()
+	defer c.mutex.Unlock()
 
 	for _, gen := range c.gen {
 		gen.SetStart(start)
