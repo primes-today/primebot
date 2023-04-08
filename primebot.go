@@ -57,7 +57,7 @@ func (p *PrimeBot) Start(ctx context.Context) error {
 	p.log.Print("fetching initial list of statuses")
 
 	fetchctx, cancel := context.WithTimeout(
-		context.Background(),
+		ctx,
 		p.opts.ServiceTimeout,
 	)
 	cur, err := p.ftc.Fetch(fetchctx)
@@ -90,7 +90,7 @@ func (p *PrimeBot) Start(ctx context.Context) error {
 		case <-t:
 			status := <-pc
 			postctx, cancel := context.WithTimeout(
-				context.Background(),
+				ctx,
 				p.opts.ServiceTimeout,
 			)
 			err := p.pst.Post(postctx, status)
