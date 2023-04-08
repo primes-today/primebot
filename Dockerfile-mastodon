@@ -10,4 +10,5 @@ RUN go install -v
 WORKDIR /go/bin
 RUN rm -rf /go/src/github.com/primes-today/primebot
 
-CMD primebot-mastodon --interval 1h
+ENTRYPOINT ["primebot-mastodon"]
+CMD ["-interval" "1h"]
