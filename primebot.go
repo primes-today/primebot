@@ -60,8 +60,8 @@ func (p *PrimeBot) Start(ctx context.Context) error {
 		context.Background(),
 		p.opts.ServiceTimeout,
 	)
-	cancel() // cancel to avoid leaking
 	cur, err := p.ftc.Fetch(fetchctx)
+	cancel() // cancel to avoid leaking
 	if err != nil {
 		return err
 	}
